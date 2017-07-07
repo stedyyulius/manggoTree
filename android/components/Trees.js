@@ -11,7 +11,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  Image
+  Image,
+  Modal
 } from 'react-native';
 
 import {grow} from '../actions/index.js'
@@ -26,7 +27,7 @@ class Trees extends Component{
       tree:{
         fruits:0,
         age:0,
-        maxAge:10
+        maxAge:15
       }
     }
   }
@@ -34,24 +35,27 @@ class Trees extends Component{
     return(
       <Provider store={store}>
       <View style={styles.container}>
-        <Text style={styles.instructions}> {this.props.tree}</Text>
-        <Text style={styles.instructions}> {this.state.tree.fruits}</Text>
+        <Text style={styles.instructions}>Tree: {this.props.navigation.state.params.tree}</Text>
+        <Text style={styles.instructions}>Fruits: {this.state.tree.fruits}</Text>
           {(this.state.tree.age < 3)
           ?<Image
             source ={{uri:"https://keithcraft.org/wp-content/uploads/sites/3/2014/10/new-seeds.jpg"}}
-            style={{width:300,height:300,marginTop:20}}/>
+            style={{width:300,height:250,marginTop:20}}/>
           : (this.state.tree.age < 6)
           ? <Image
             source ={{uri:"https://previews.123rf.com/images/smit/smit0906/smit090600270/5055044-small-tree-isolated-on-white-Stock-Photo.jpg"}}
-            style={{width:300,height:300,marginTop:20}}/>
+            style={{width:300,height:250,marginTop:20}}/>
           : (this.state.tree.age < 9)
           ? <Image
             source ={{uri:"https://vignette4.wikia.nocookie.net/mysingingmonsters/images/5/5e/Plant_Island_Medium_Tree.png/revision/latest?cb=20121204213743"}}
-            style={{width:300,height:300,marginTop:20}}/>
+            style={{width:300,height:250,marginTop:20}}/>
           : (this.state.tree.age === 12)
           ? <Image
             source ={{uri:"http://previews.123rf.com/images/fleyeing/fleyeing1005/fleyeing100500013/6977749-Exotic-lone-adult-tree-on-an-Asian-hilltop-near-a-park--Stock-Photo.jpg"}}
-            style={{width:300,height:300,marginTop:20}}/>
+            style={{width:300,height:250,marginTop:20}}/>
+          : <Image
+            source ={{uri:"http://img05.deviantart.net/23aa/i/2013/069/e/5/dead_tree_04_by_gd08-d5xl4sv.png"}}
+            style={{width:300,height:250,marginTop:20}}/>
           }
         <Button
           onPress={()=>this.grow(this.state.tree)}
@@ -60,7 +64,7 @@ class Trees extends Component{
           accessibilityLabel=""
         />
         <Button
-          onPress={()=>this.harvest()}
+          onPress={()=>this.harvest(this.state.tree)}
           title="Harvest"
           color="#841584"
           accessibilityLabel=""
@@ -71,6 +75,9 @@ class Trees extends Component{
   }
 
   grow(prevTree){
+    if(prevTree.age >= prevTree.maxAge){
+      this.props.navigation.navigate('DeadTree')
+    }
     const newTree ={
       age: prevTree.age + 1,
       fruits: prevTree.fruits + Math.floor(Math.random()* 5),
@@ -81,8 +88,15 @@ class Trees extends Component{
     })
   }
 
-  harvest(){
-
+  harvest(prevTree){
+    const newTree ={
+      age: prevTree.age,
+      fruits: 0,
+      maxAge: 10
+    }
+    this.setState({
+      tree: newTree
+    })
   }
 
   componentWillMount(){

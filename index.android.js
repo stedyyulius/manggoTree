@@ -11,6 +11,7 @@ import {StackNavigator} from 'react-navigation'
 
 import store from './android/store/store.js'
 import Trees from './android/components/Trees.js'
+import DeadTree from './android/components/DeadTree.js'
 import {getName} from './android/actions/index.js'
 
 import {
@@ -81,7 +82,8 @@ const mapDispatchToProps = ()=>{
 
 const App = StackNavigator({
   Welcome: {screen:livecodings},
-  Trees: { screen: Trees }
+  Trees: { screen: Trees },
+  DeadTree: {screen: DeadTree}
 });
 
 
